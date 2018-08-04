@@ -67,4 +67,39 @@ public class RedBlackTreeTester {
 		}
 	}
 	
+	@Test
+	public void testInOrderTraversal() {
+		RedBlackTree<Integer> tree = new RedBlackTree<>();
+		ArrayList<Integer> list = new ArrayList<>();
+		for (int i = 0; i < 100; i++) {
+			list.add(i);
+		}
+		for (int i = 0; i < 100; i++) {
+			tree.insert(i, i);
+		}
+		list.sort((a, b) -> {
+			return a.compareTo(b);
+		});
+		ArrayList<Integer> tl = tree.getTraversal();
+		assertArrayEquals(list.toArray(), tl.toArray());
+	}
+	
+	@Test
+	public void testIterate() {
+		RedBlackTree<Integer> tree = new RedBlackTree<>();
+		ArrayList<Integer> list = new ArrayList<>();
+		for (int i = 0; i < 100; i++) {
+			list.add(i);
+		}
+		for (int i = 0; i < 100; i++) {
+			tree.insert(i, i);
+		}
+		int[] x = new int[1];
+		x[0] = 0;
+		tree.iterate(value -> {
+			assertEquals(list.get(x[0]), value);
+			x[0]++;
+		});
+	}
+	
 }

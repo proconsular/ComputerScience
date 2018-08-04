@@ -1,7 +1,12 @@
 package com.chrisluttio.cs.trees;
 
+import java.util.ArrayList;
+import java.util.function.Consumer;
+
 public class RedBlackTree<T> {
 	public static final int BLACK = 0, RED = 1;
+	
+	private int size;
 	
 	private final RedBlackNode<T> sentinal;
 	private RedBlackNode<T> root;
@@ -11,6 +16,10 @@ public class RedBlackTree<T> {
 		root = sentinal;
 	}
 	
+	public int size() {
+		return size;
+	}
+		
 	public void insert(int key, T value) {
 		RedBlackNode<T> z = new RedBlackNode<T>(key, value);
 		RedBlackNode<T> y = sentinal;
@@ -33,6 +42,7 @@ public class RedBlackTree<T> {
 		z.right = sentinal;
 		z.color = RED;
 		rebalance(z);
+		size++;
 	}
 	
 	private void rebalance(RedBlackNode<T> z) {
@@ -76,6 +86,8 @@ public class RedBlackTree<T> {
 	
 	public void delete(int key) {
 		RedBlackNode<T> z = findNode(key);
+		if (z != sentinal)
+			size--;
 		RedBlackNode<T> y = z;
 		RedBlackNode<T> x = sentinal;
 		int y_original_color = y.color;
@@ -228,6 +240,36 @@ public class RedBlackTree<T> {
 			x.right.parent = y;
 		x.right = y;
 		y.parent = x;
+	}
+	
+	public ArrayList<T> getTraversal() {
+		return getInOrderTraversal(root);
+	}
+	
+	private ArrayList<T> getInOrderTraversal(RedBlackNode<T> node) {
+		ArrayList<T> list = new ArrayList<>();
+		
+		if (node.left != sentinal)
+			list.addAll(getInOrderTraversal(node.left));
+		
+		list.add(node.value);
+		
+		if (node.right != sentinal)
+			list.addAll(getInOrderTraversal(node.right));
+		
+		return list;
+	}
+
+	public void iterate(Consumer<T> consumer) {
+		iterateNode(root, consumer);
+	}
+	
+	private void iterateNode(RedBlackNode<T> node, Consumer<T> consumer) {
+		if (node.left != sentinal)
+			iterateNode(node.left, consumer);
+		consumer.accept(node.value);
+		if (node.right != sentinal)
+			iterateNode(node.right, consumer);
 	}
 	
 }

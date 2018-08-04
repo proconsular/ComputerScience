@@ -132,4 +132,8 @@ public class LinkedList<T> {
 		return other;
 	}
 	
+	public boolean isEmpty() {
+		return head == null;
+	}
+	
 }
